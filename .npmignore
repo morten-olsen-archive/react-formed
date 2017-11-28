@@ -1,0 +1,9 @@
+node_modules
+/.nyc_output
+/coverage
+/src
+/test
+/.gitignore
+/.travis.yml
+/package-lock.json
+/wallaby.js

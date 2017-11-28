@@ -1,0 +1,80 @@
+{
+  "name": "react-formed",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "nyc mocha -- test/**/*.spec.js",
+    "build": "babel -d lib src",
+    "precommit": "lint-staged",
+    "prepublish": "npm run build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "release": "git add --all && git cz && git push"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary",
+      "html"
+    ],
+    "require": [
+      "babel-core/register",
+      "jsdom-global/register",
+      "./test/setup"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "printWidth": 80,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "insertPragma": true
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-1": "^6.24.1",
+    "chai": "^4.1.2",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "jsdom": "^11.5.1",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^4.0.1",
+    "prop-types": "^15.6.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-cli": "^6.26.0",
+    "husky": "^0.14.3",
+    "nyc": "^11.3.0",
+    "prettier": "^1.8.2",
+    "semantic-release": "^8.2.0"
+  },
+  "peerDependencies": {
+    "react": "^16.1.1",
+    "prop-types": "^15.6.0"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "stage-1",
+      "react"
+    ]
+  }
+}

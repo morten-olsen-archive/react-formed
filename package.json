@@ -1,6 +1,6 @@
 {
   "name": "react-formed",
-  "version": "0.0.0",
+  "version": "0.0.0-development",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -76,5 +76,9 @@
       "stage-1",
       "react"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morten-olsen/react-formed.git"
   }
 }

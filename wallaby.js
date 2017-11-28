@@ -1,29 +1,28 @@
-module.exports = function (w) {
+module.exports = w => ({
+  files: [
+    'src/**/*.js',
+    'src/**/*.jsx',
+    'test/setup.js',
+  ],
 
-  return {
-    files: [
-      'src/**/*.js',
-      'test/setup.js',
-    ],
+  tests: [
+    'test/*.spec.jsx',
+  ],
 
-    tests: [
-      'test/*.spec.js'
-    ],
+  compilers: {
+    '**/*.js': w.compilers.babel(),
+    '**/*.jsx': w.compilers.babel(),
+  },
 
-    compilers: {
-      '**/*.js': w.compilers.babel()
-    },
+  testFramework: 'mocha',
 
-    testFramework: 'mocha',
+  env: {
+    type: 'node',
+  },
 
-    env: {
-      type: 'node'
-    },
-
-    setup: function () {
-      require('babel-polyfill');
-      require('jsdom-global/register');
-      require('./test/setup');
-    }
-  };
-};
+  setup: () => {
+    require('babel-polyfill'); // eslint-disable-line
+    require('jsdom-global/register'); // eslint-disable-line
+    require('./test/setup'); // eslint-disable-line
+  },
+});

@@ -10,15 +10,15 @@ class List extends Component {
     this.add = this.add.bind(this);
   }
 
-  add(value) {
-    const values = [...(this.props.value || [])];
-    values.push(value);
+  setValue(index, value) {
+    const values = [...this.props.value];
+    values[index] = value;
     this.props.setValue(values);
   }
 
-  setValue(index, value) {
+  add(value) {
     const values = [...(this.props.value || [])];
-    values[index] = value;
+    values.push(value);
     this.props.setValue(values);
   }
 
@@ -28,13 +28,12 @@ class List extends Component {
   }
 
   render() {
-
-    const values = this.props.value || [];
+    const values = this.props.value;
     const children = values.map((value, i) => (
-      <ListItem key={i} ownSetValue={(value) => this.setValue(i, value)} ownValue={value}>
+      <ListItem key={`key${+i}`} ownSetValue={newValue => this.setValue(i, newValue)} ownValue={value}>
         {this.props.render({
           value,
-          remove: this.remove.bind(this, i)
+          remove: this.remove.bind(this, i),
         })}
       </ListItem>
     ));
@@ -48,6 +47,17 @@ class List extends Component {
 
 List.contextTypes = {
   form: PropTypes.object,
+};
+
+List.propTypes = {
+  children: PropTypes.func.isRequired,
+  render: PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
+  value: PropTypes.arrayOf(PropTypes.any),
+};
+
+List.defaultProps = {
+  value: [],
 };
 
 export default withForm(List);

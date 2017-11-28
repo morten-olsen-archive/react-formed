@@ -1,11 +1,19 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import withForm from '../with-form';
 
 class List extends Component {
   constructor() {
     super();
     this.setValue = this.setValue.bind(this);
+  }
+
+  getChildContext() {
+    return {
+      form: {
+        values: this.props.ownValue,
+        setValue: this.setValue,
+      },
+    };
   }
 
   setValue(name, value) {
@@ -16,22 +24,25 @@ class List extends Component {
     });
   }
 
-  getChildContext() {
-    return {
-      form: {
-        values: this.props.ownValue,
-        setValue: this.setValue,
-      }
-    };
-  }
-
   render() {
     return this.props.children;
   }
 }
 
-List.childContextTypes= {
+List.childContextTypes = {
   form: PropTypes.object,
-}
+};
 
-export default withForm(List);
+List.propTypes = {
+  ownSetValue: PropTypes.func.isRequired,
+  value: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+  ownValue: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+  children: PropTypes.node.isRequired,
+};
+
+List.defaultProps = {
+  value: undefined,
+  ownValue: undefined,
+};
+
+export default List;

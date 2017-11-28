@@ -1,16 +1,16 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import { expect } from 'chai';
+import { mount } from 'enzyme';
+import { createStore } from 'redux';
 import {
   Input,
   ReduxForm,
   Form,
   formReducer,
 } from '../src';
-import { Provider } from 'react-redux';
-import { expect } from 'chai';
-import { mount } from 'enzyme';
-import { createStore } from 'redux';
 
-const wrapElement = (elm, store, initValues) => mount(
+const wrapElement = (elm, store, initValues) => mount((
   <Provider store={store}>
     <ReduxForm getState={state => state}>
       <Form name="foo" initValues={initValues}>
@@ -18,21 +18,21 @@ const wrapElement = (elm, store, initValues) => mount(
       </Form>
     </ReduxForm>
   </Provider>
-);
+));
 
 describe('with redux', () => {
   let store;
 
   beforeEach(() => {
-    store = createStore(formReducer)
-  })
+    store = createStore(formReducer);
+  });
 
   it('should render without value', () => {
     const wrapper = wrapElement(<Input name="test" />, store);
     expect(wrapper.html()).to.be.equal('<input value="">');
     expect(store.getState()).to.be.eql({
       foo: {
-      }
+      },
     });
   });
 
@@ -48,7 +48,7 @@ describe('with redux', () => {
 
   it('should change value on change', () => {
     const wrapper = wrapElement(<Input name="test" />, store);
-    const evt = {target: {name: "pollName", value: "world"}};
+    const evt = { target: { name: 'pollName', value: 'world' } };
     wrapper.find(Input).simulate('change', evt);
     expect(store.getState()).to.be.eql({
       foo: {

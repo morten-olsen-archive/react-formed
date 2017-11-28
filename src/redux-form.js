@@ -6,7 +6,7 @@ class ReduxForm extends React.Component {
     return {
       reduxForm: {
         getState: this.props.getState,
-      }
+      },
     };
   }
 
@@ -15,7 +15,12 @@ class ReduxForm extends React.Component {
   }
 }
 
-ReduxForm.childContextTypes= {
+ReduxForm.propTypes = {
+  children: PropTypes.node.isRequired,
+  getState: PropTypes.func.isRequired,
+};
+
+ReduxForm.childContextTypes = {
   reduxForm: PropTypes.shape({
     getState: PropTypes.func,
   }),

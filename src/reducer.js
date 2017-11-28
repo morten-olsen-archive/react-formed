@@ -1,5 +1,5 @@
 const reducer = (state = {}, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case '@@FORMS/SET_VALUES': {
       const { form, values } = action.payload;
       return {

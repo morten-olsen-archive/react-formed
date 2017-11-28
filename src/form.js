@@ -4,8 +4,17 @@ import PropTypes from 'prop-types';
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { values: props.initValues || {} };
+    this.state = { values: props.initValues };
     this.setValue = this.setValue.bind(this);
+  }
+
+  getChildContext() {
+    return {
+      form: {
+        values: this.getValues(),
+        setValue: this.setValue,
+      },
+    };
   }
 
   componentWillMount() {
@@ -15,7 +24,7 @@ class Form extends React.Component {
         type: '@@FORMS/SET_VALUES',
         payload: {
           form: this.props.name,
-          values: this.props.initValues || {},
+          values: this.props.initValues,
         },
       });
     }
@@ -24,15 +33,19 @@ class Form extends React.Component {
     }
   }
 
+  getValues() {
+    return this.state.values;
+  }
+
   setValue(name, value) {
     if (this.context.reduxForm) {
-      this._setReduxValue(name, value);
+      this.setReduxValue(name, value);
     } else {
-      this._setStateValue(name, value);
+      this.setStateValue(name, value);
     }
   }
 
-  _setReduxValue(name, value) {
+  setReduxValue(name, value) {
     this.context.store.dispatch({
       type: '@@FORMS/SET_VALUE',
       payload: {
@@ -41,12 +54,9 @@ class Form extends React.Component {
         value,
       },
     });
-    if (this.props.onFormChange) {
-      this.props.onFormChange(this.getValues());
-    }
   }
 
-  _setStateValue(name, value) {
+  setStateValue(name, value) {
     this.setState({
       values: {
         ...this.state.values,
@@ -66,27 +76,28 @@ class Form extends React.Component {
     });
   }
 
-  getValues() {
-    return this.state.values;
-  }
-
-  getChildContext() {
-    return {
-      form: {
-        values: this.getValues(),
-        setValue: this.setValue,
-      }
-    };
-  }
-
   render() {
     return this.props.children;
   }
 }
 
-Form.childContextTypes= {
+Form.propTypes = {
+  initValues: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  children: PropTypes.node,
+  onFormChange: PropTypes.func,
+  name: PropTypes.string,
+};
+
+Form.defaultProps = {
+  initValues: {},
+  children: null,
+  onFormChange: undefined,
+  name: undefined,
+};
+
+Form.childContextTypes = {
   form: PropTypes.object,
-}
+};
 
 Form.contextTypes = {
   store: PropTypes.object,

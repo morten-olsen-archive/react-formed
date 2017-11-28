@@ -80,5 +80,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/morten-olsen/react-formed.git"
+  },
+  "dependencies": {
+    "coveralls": "^3.0.0"
   }
 }

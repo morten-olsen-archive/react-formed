@@ -1,8 +1,8 @@
 # React Formed
 
-[![Coverage Status](https://coveralls.io/repos/github/morten-olsen/react-formed/badge.svg?branch=master)](https://coveralls.io/github/morten-olsen/react-formed?branch=master) [![Build Status](https://travis-ci.org/morten-olsen/react-formed.svg?branch=master)](https://travis-ci.org/morten-olsen/react-formed) [![Maintainability](https://api.codeclimate.com/v1/badges/5ea237e554397d6a8d35/maintainability)](https://codeclimate.com/github/morten-olsen/react-formed/maintainability) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![code style: airbnb](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript) [![npm](https://img.shields.io/npm/v/react-formed.svg)](https://www.npmjs.com/package/react-formed) [![Known Vulnerabilities](https://snyk.io/test/github/morten-olsen/react-formed/badge.svg)](https://snyk.io/test/github/morten-olsen/react-formed) [![Wallaby.js](https://img.shields.io/badge/wallaby.js-configured-green.svg)](https://wallabyjs.com)
-
 This is a project which aims to create a really easy way to build complex forms, both using component state with events or using redux
+
+[![Coverage Status](https://coveralls.io/repos/github/morten-olsen/react-formed/badge.svg?branch=master)](https://coveralls.io/github/morten-olsen/react-formed?branch=master) [![Build Status](https://travis-ci.org/morten-olsen/react-formed.svg?branch=master)](https://travis-ci.org/morten-olsen/react-formed) [![Maintainability](https://api.codeclimate.com/v1/badges/5ea237e554397d6a8d35/maintainability)](https://codeclimate.com/github/morten-olsen/react-formed/maintainability) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![code style: airbnb](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript) [![npm](https://img.shields.io/npm/v/react-formed.svg)](https://www.npmjs.com/package/react-formed) [![Known Vulnerabilities](https://snyk.io/test/github/morten-olsen/react-formed/badge.svg)](https://snyk.io/test/github/morten-olsen/react-formed) [![Wallaby.js](https://img.shields.io/badge/wallaby.js-configured-green.svg)](https://wallabyjs.com)
 
 ## Install
 
@@ -27,7 +27,7 @@ export default () => (
 
 The above example will log an object to the console, each time a value is changed. The value will have the form of `{ field1: ..., field2: ... }`
 
-### Createing groups
+### Creating groups
 
 Values can also be grouped, which will cause them to create a namespace inside the form values, for instance
 
@@ -48,6 +48,33 @@ export default () => (
 would result in an object `{ group1: { field1: ..., field2: ... }, field3 }`
 
 ### Creating lists
+
+```javascript
+import { Form, Input, List } from 'react-formed';
+
+export default () => (
+  <Form onFormChange={values => console.log(values)}>
+    <List 
+      name="list1"
+      render={({ remove }) => (
+        <div>
+          <Input name="field1" />
+          <button onClick={remove}>Remove</button>
+        <div>
+      )}
+    >
+      {({ add, children }) => (
+        <div>
+          {children}
+          <button onClick={add}>
+            Add
+          </button>
+        </div>
+      )}
+    </List>
+  </Form>
+)
+```
 
 ## Using with Redux
 
@@ -74,6 +101,45 @@ export default () => (
 )
 ```
 
+### Selectors
+
+You can use the `createSelector` method to create a selector for easier working with forms in redux.
+
+```javascript
+import { createSelector } from 'react-formed';
+
+const selector = createSelector(state => state.form);
+
+const mapStateToProps = state => ({
+  myForm: selector(state, 'myForm'),
+});
+```
+
+### Actions
+
+You can use build in actions for common tasks in redux
+
+```javascript
+import { actions } from 'react-formed';
+
+dispatch(actions.clear('myForm')); // Clear all fields in a form
+
+dispatch(action.setForm('myForm', { // Replaces all values in the form with the provided values
+  fieldA: 'valueA',
+  fieldB: 'valueB',
+  fieldC: [{
+    title: 1,
+  }, {
+    title: 2,
+  }]
+}));
+
+dispatch(action.setValue('myForm', 'fieldB', 'valueC')); // Replaces a specific value with the provided value
+
+// TODO:
+dispatch(action.setValue('myForm', ['fieldC', 1, 'title'], 'valueD'));
+```
+
 ## Creating custom elements
 
 It is easy to create custom elements, using the `withForm` decorator, which supplies the function with a `value` object and a `setValue` function
@@ -91,4 +157,25 @@ const Input = ({ setValue, value, ...props }) => (
 );
 
 export default withForm(Input);
+```
+
+### Loose bindings
+
+If you do not wish to bind the component using the `withForm` HOC, a render-prop version is also provided
+
+```javascript
+import { WithForm } from 'react-formed';
+const Input = (props) => (
+  <WithForm>
+    {(value, setValue) => (
+      <input
+        {...props}
+        value={value || ''}
+        onChange={({ target }) => setValue(target.value)}
+      />
+    )}
+  </WithForm>
+);
+
+export default Input;
 ```

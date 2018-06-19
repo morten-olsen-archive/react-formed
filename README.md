@@ -72,9 +72,12 @@ export default () => (
         </div>
       )}
     </List>
+    <Input name="field3" />
   </Form>
 )
 ```
+
+would result in an object `{ list1: [{ field1: ... }, ..., ], field3 }`
 
 ## Using with Redux
 
@@ -108,10 +111,10 @@ You can use the `createSelector` method to create a selector for easier working 
 ```javascript
 import { createSelector } from 'react-formed';
 
-const selector = createSelector(state => state.form);
+const { getForm } = createSelector(state => state.form);
 
 const mapStateToProps = state => ({
-  myForm: selector(state, 'myForm'),
+  myForm: getForm(state, 'myForm'),
 });
 ```
 

@@ -41,7 +41,8 @@
     "singleQuote": true,
     "trailingComma": "all",
     "bracketSpacing": true,
-    "insertPragma": true
+    "insertPragma": true,
+    "arrowParens": "always"
   },
   "keywords": [],
   "author": "",

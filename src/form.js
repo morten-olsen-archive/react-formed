@@ -76,6 +76,7 @@ class Form extends React.Component {
     const state = this.context.reduxForm.getState(
       this.context.store.getState(),
     );
+
     this.setState({
       values: state[this.props.name],
     });

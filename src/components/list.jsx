@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import withForm from '../with-form';
 import ListItem from './list-item';
 
+const getValue = (value) => (typeof value === 'object' ? value : { _self: value });
+
 class List extends Component {
   constructor() {
     super();
@@ -12,7 +14,7 @@ class List extends Component {
 
   setValue(index, value) {
     const values = [...this.props.value];
-    values[index] = value;
+    values[index] = value._self ? value._self : value; // eslint-disable-line no-underscore-dangle
     this.props.setValue(values);
   }
 
@@ -27,16 +29,21 @@ class List extends Component {
     this.props.setValue(values);
   }
 
-  render() {
-    const values = this.props.value;
-    const children = values.map((value, i) => (
-      <ListItem key={`key${+i}`} ownSetValue={newValue => this.setValue(i, newValue)} ownValue={value}>
+  renderChildren = (value, i) => {
+    const ownValue = getValue(value);
+    return (
+      <ListItem key={`key${+i}`} ownSetValue={newValue => this.setValue(i, newValue)} ownValue={ownValue}>
         {this.props.render({
-          value,
+          value: ownValue,
           remove: this.remove.bind(this, i),
         })}
       </ListItem>
-    ));
+    );
+  }
+
+  render() {
+    const values = this.props.value;
+    const children = values.map(this.renderChildren);
     const output = this.props.children({
       children,
       add: this.add,

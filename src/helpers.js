@@ -1,22 +1,19 @@
 /** @format */
+const getTargetState = (names, carbonState) =>
+  names.reduce((output, currentName, index) => {
+    const result = output;
+    const nextName = names[index + 1];
+    if (!result[currentName]) {
+      result[currentName] = typeof nextName === 'number' ? [] : {};
+    }
+    return result[currentName];
+  }, carbonState);
 
 export const updateState = (name, value, state) => {
   const names = Array.isArray(name) ? [...name] : [name];
   const carbonState = { ...state };
-  let stateTarget = carbonState;
   const target = names.pop();
-  for (let i = 0; i < names.length; i += 1) {
-    const cName = names[i];
-    if (!stateTarget[cName]) {
-      const nName = names[i + 1];
-      if (typeof nName === 'number') {
-        stateTarget[cName] = [];
-      } else {
-        stateTarget[cName] = {};
-      }
-    }
-    stateTarget = stateTarget[cName];
-  }
+  const stateTarget = getTargetState(names, carbonState);
   stateTarget[target] = value;
   return carbonState;
 };

@@ -3,11 +3,14 @@ import { Provider } from 'react-redux';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import { createStore } from 'redux';
+
 import {
   Input,
   ReduxForm,
   Form,
   formReducer,
+  createSelector,
+  actions,
 } from '../src';
 
 const wrapElement = (elm, store, initValues) => mount((
@@ -22,9 +25,11 @@ const wrapElement = (elm, store, initValues) => mount((
 
 describe('with redux', () => {
   let store;
+  let selector;
 
   beforeEach(() => {
     store = createStore(formReducer);
+    selector = createSelector(state => state);
   });
 
   it('should render without value', () => {
@@ -54,6 +59,29 @@ describe('with redux', () => {
       foo: {
         test: 'world',
       },
+    });
+    expect(wrapper.html()).to.be.equal('<input value="world">');
+  });
+
+  it('should reset value on clear', () => {
+    const wrapper = wrapElement(<Input name="test" />, store);
+    const evt = { target: { name: 'pollName', value: 'world' } };
+    wrapper.find(Input).simulate('change', evt);
+    store.dispatch(actions.clear('foo'));
+    expect(store.getState()).to.be.eql({
+      foo: {
+      },
+    });
+    expect(wrapper.html()).to.be.equal('<input value="">');
+  });
+
+  it('should be able to select', () => {
+    const wrapper = wrapElement(<Input name="test" />, store);
+    const evt = { target: { name: 'pollName', value: 'world' } };
+    wrapper.find(Input).simulate('change', evt);
+    const form = selector.getForm(store.getState(), 'foo');
+    expect(form).to.be.eql({
+      test: 'world',
     });
     expect(wrapper.html()).to.be.equal('<input value="world">');
   });

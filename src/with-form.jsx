@@ -6,11 +6,20 @@ const withForm = (WrappedComponent) => {
     const { name, ...remainingProps } = props;
     const { form } = context;
     const { values = {}, setValue } = form;
+    const names = Array.isArray(name) ? [...name] : [name];
+    let targetValues = values;
+    const target = names.pop();
+    for (let i = 0; i < names.length; i += 1) {
+      if (targetValues[names[i]]) {
+        targetValues = targetValues[names[i]];
+      }
+    }
+    const finalValue = targetValues[target];
     return (
       <WrappedComponent
         {...remainingProps}
         setValue={value => setValue(name, value)}
-        value={values[name]}
+        value={finalValue}
       />
     );
   };

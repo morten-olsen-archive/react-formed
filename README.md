@@ -27,7 +27,19 @@ export default () => (
 
 The above example will log an object to the console, each time a value is changed. The value will have the form of `{ field1: ..., field2: ... }`
 
-### Createing groups
+### Setting initial values
+```javascript
+import { Form, Input } from 'react-formed';
+
+export default () => (
+  <Form initValues={{ field1: 'test1', field2: 'test2' }}>
+    <Input name="field1" />
+    <Input name="field2" />
+  </Form>
+)
+```
+
+### Creating groups
 
 Values can also be grouped, which will cause them to create a namespace inside the form values, for instance
 
@@ -48,6 +60,40 @@ export default () => (
 would result in an object `{ group1: { field1: ..., field2: ... }, field3 }`
 
 ### Creating lists
+
+```javascript
+import { Form, Input, List } from 'react-formed';
+
+export default () => (
+  <Form onFormChange={values => console.log(values)}>
+    <List 
+      name="list1"
+      render={({ remove }) => (
+        <div>
+          <Input name="field1" />
+          <button onClick={remove}>Remove</button>
+        <div>
+      )}
+    >
+      {({ add, children }) => (
+        <div>
+          {children}
+          <button onClick={add}>
+            Add
+          </button>
+        </div>
+      )}
+    </List>
+    <Input name="field3" />
+  </Form>
+)
+```
+
+would result in an object `{ list1: [{ field1: ... }, ..., ], field3 }`
+
+## Using composition names
+
+If working with complex objects composition names can be used. for instance `<Input name={['testA', 1, 'testB']}>`. Be aware that compositions will create any non existing composition part, so the above exampe will generate a state as `{testA: [undefined, { testB: $value }]}`. Number keys will create arrays while string keys will create objects. This is usable with `List`s and `Group`s as long as the types matches, and composition names inside `Group` and `List` will be scoped to their `Group` or `List`.
 
 ## Using with Redux
 
@@ -74,6 +120,43 @@ export default () => (
 )
 ```
 
+### Selectors
+
+You can use the `createSelector` method to create a selector for easier working with forms in redux.
+
+```javascript
+import { createSelector } from 'react-formed';
+
+const { getForm } = createSelector(state => state.form);
+
+const mapStateToProps = state => ({
+  myForm: getForm(state, 'myForm'),
+});
+```
+
+### Actions
+
+You can use build in actions for common tasks in redux
+
+```javascript
+import { actions } from 'react-formed';
+
+dispatch(actions.clear('myForm')); // Clear all fields in a form
+
+dispatch(actions.setForm('myForm', { // Replaces all values in the form with the provided values
+  fieldA: 'valueA',
+  fieldB: 'valueB',
+  fieldC: [{
+    title: 1,
+  }, {
+    title: 2,
+  }],
+}));
+
+dispatch(actions.setValue('myForm', 'fieldB', 'valueC')); // Replaces a specific value with the provided value
+dispatch(actions.setValue('myForm', ['fieldC', 1, 'title'], 'valueD'));
+```
+
 ## Creating custom elements
 
 It is easy to create custom elements, using the `withForm` decorator, which supplies the function with a `value` object and a `setValue` function
@@ -91,4 +174,25 @@ const Input = ({ setValue, value, ...props }) => (
 );
 
 export default withForm(Input);
+```
+
+### Loose bindings
+
+If you do not wish to bind the component using the `withForm` HOC, a render-prop version is also provided
+
+```javascript
+import { WithForm } from 'react-formed';
+const Input = (props) => (
+  <WithForm>
+    {(value, setValue) => (
+      <input
+        {...props}
+        value={value || ''}
+        onChange={({ target }) => setValue(target.value)}
+      />
+    )}
+  </WithForm>
+);
+
+export default Input;
 ```

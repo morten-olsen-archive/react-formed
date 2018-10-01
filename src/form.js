@@ -1,5 +1,8 @@
+/** @format */
+
 import React from 'react';
 import PropTypes from 'prop-types';
+import { updateState } from './helpers';
 
 class Form extends React.Component {
   constructor(props) {
@@ -57,20 +60,22 @@ class Form extends React.Component {
   }
 
   setStateValue(name, value) {
-    this.setState({
-      values: {
-        ...this.state.values,
-        [name]: value,
+    this.setState(
+      {
+        values: updateState(name, value, this.state.values),
       },
-    }, () => {
-      if (this.props.onFormChange) {
-        this.props.onFormChange(this.getValues());
-      }
-    });
+      () => {
+        if (this.props.onFormChange) {
+          this.props.onFormChange(this.getValues());
+        }
+      },
+    );
   }
 
   subscribe() {
-    const state = this.context.reduxForm.getState(this.context.store.getState());
+    const state = this.context.reduxForm.getState(
+      this.context.store.getState(),
+    );
     this.setState({
       values: state[this.props.name],
     });

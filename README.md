@@ -27,6 +27,18 @@ export default () => (
 
 The above example will log an object to the console, each time a value is changed. The value will have the form of `{ field1: ..., field2: ... }`
 
+### Setting initial values
+```javascript
+import { Form, Input } from 'react-formed';
+
+export default () => (
+  <Form initValues={{ field1: 'test1', field2: 'test2' }}>
+    <Input name="field1" />
+    <Input name="field2" />
+  </Form>
+)
+```
+
 ### Creating groups
 
 Values can also be grouped, which will cause them to create a namespace inside the form values, for instance
@@ -79,6 +91,10 @@ export default () => (
 
 would result in an object `{ list1: [{ field1: ... }, ..., ], field3 }`
 
+## Using composition names
+
+If working with complex objects composition names can be used. for instance `<Input name={['testA', 1, 'testB']}>`. Be aware that compositions will create any non existing composition part, so the above exampe will generate a state as `{testA: [undefined, { testB: $value }]}`. Number keys will create arrays while string keys will create objects. This is usable with `List`s and `Group`s as long as the types matches, and composition names inside `Group` and `List` will be scoped to their `Group` or `List`.
+
 ## Using with Redux
 
 When using with redux, a `ReduxForm` element should be added after redux's `Provider`, which should have a `getState` function, which tells where in the store the `formReducer` can be found. Also when using Redux form elements should have a name attribute, which should be unique for each form
@@ -127,20 +143,18 @@ import { actions } from 'react-formed';
 
 dispatch(actions.clear('myForm')); // Clear all fields in a form
 
-dispatch(action.setForm('myForm', { // Replaces all values in the form with the provided values
+dispatch(actions.setForm('myForm', { // Replaces all values in the form with the provided values
   fieldA: 'valueA',
   fieldB: 'valueB',
   fieldC: [{
     title: 1,
   }, {
     title: 2,
-  }]
+  }],
 }));
 
-dispatch(action.setValue('myForm', 'fieldB', 'valueC')); // Replaces a specific value with the provided value
-
-// TODO:
-dispatch(action.setValue('myForm', ['fieldC', 1, 'title'], 'valueD'));
+dispatch(actions.setValue('myForm', 'fieldB', 'valueC')); // Replaces a specific value with the provided value
+dispatch(actions.setValue('myForm', ['fieldC', 1, 'title'], 'valueD'));
 ```
 
 ## Creating custom elements

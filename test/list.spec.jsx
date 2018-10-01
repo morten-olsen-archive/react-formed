@@ -77,4 +77,36 @@ describe('with list', () => {
       ],
     });
   });
+
+  it('should be able to render simple values', () => {
+    const wrapper = wrapElement(
+      <List
+        name="wrapper"
+        render={() => <Input name="_self" />}
+      >
+        {({ children }) => (
+          <div>{children}</div>
+        )}
+      </List>,
+      {
+        wrapper: [
+          'a',
+          'b',
+        ],
+      },
+    );
+    const inputs = wrapper.find(Input);
+    expect(inputs).to.have.length(2);
+    const evt1 = { target: { name: 'pollName', value: 'c' } };
+    inputs.first().simulate('change', evt1);
+    const evt2 = { target: { name: 'pollName', value: 'd' } };
+    inputs.last().simulate('change', evt2);
+    expect(wrapper.html()).to.be.equal('<div><input value="c"><input value="d"></div>');
+    expect(state).to.be.eql({
+      wrapper: [
+        'c',
+        'd',
+      ],
+    });
+  });
 });

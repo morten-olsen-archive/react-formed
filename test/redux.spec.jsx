@@ -85,4 +85,28 @@ describe('with redux', () => {
     });
     expect(wrapper.html()).to.be.equal('<input value="world">');
   });
+
+  it('should be able to set form', () => {
+    store.dispatch(actions.setForm('foo', {
+      testA: 'valueA',
+      testB: [
+        'valueB',
+        'valueC',
+      ],
+    }));
+    const form = selector.getForm(store.getState(), 'foo');
+    expect(form).to.be.eql({
+      testA: 'valueA',
+      testB: [
+        'valueB',
+        'valueC',
+      ],
+    });
+  });
+
+  it('should be able to set form to empty', () => {
+    store.dispatch(actions.setForm('foo'));
+    const form = selector.getForm(store.getState(), 'foo');
+    expect(form).to.be.eql({});
+  });
 });

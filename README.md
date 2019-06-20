@@ -39,6 +39,9 @@ export default () => (
 )
 ```
 
+Be aware that `initValues` will override any previous set form values on mount. Setting init value to `{}` will clear the form on remount (_obs:_ This behaviour is subject to change in a later version)
+
+
 ### Creating groups
 
 Values can also be grouped, which will cause them to create a namespace inside the form values, for instance

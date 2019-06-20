@@ -7,7 +7,7 @@ import { updateState } from './helpers';
 class Form extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { values: props.initValues };
+    this.state = { values: props.initValues || {} };
     this.setValue = this.setValue.bind(this);
   }
 
@@ -23,13 +23,17 @@ class Form extends React.Component {
   componentWillMount() {
     if (this.context.reduxForm) {
       this.context.store.subscribe(this.subscribe.bind(this));
-      this.context.store.dispatch({
-        type: '@@FORMS/SET_VALUES',
-        payload: {
-          form: this.props.name,
-          values: this.props.initValues,
-        },
-      });
+      if (this.props.initValues) {
+        this.context.store.dispatch({
+          type: '@@FORMS/SET_VALUES',
+          payload: {
+            form: this.props.name,
+            values: this.props.initValues,
+          },
+        });
+      } else {
+        this.subscribe();
+      }
     }
     if (this.props.onFormChange) {
       this.props.onFormChange(this.getValues());
@@ -95,7 +99,7 @@ Form.propTypes = {
 };
 
 Form.defaultProps = {
-  initValues: {},
+  initValues: undefined,
   children: null,
   onFormChange: undefined,
   name: undefined,

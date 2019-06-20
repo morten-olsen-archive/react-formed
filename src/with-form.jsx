@@ -21,7 +21,10 @@ const contextTypes = {
 };
 
 const propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]).isRequired,
 };
 
 const withForm = (WrappedComponent) => {

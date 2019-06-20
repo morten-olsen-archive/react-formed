@@ -30,7 +30,7 @@ class List extends Component {
 }
 
 List.childContextTypes = {
-  form: PropTypes.object,
+  form: PropTypes.object, // eslint-disable-line
 };
 
 List.propTypes = {

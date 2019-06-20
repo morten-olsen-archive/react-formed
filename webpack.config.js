@@ -1,7 +1,9 @@
+/** @format */
+
 const path = require('path');
-const webpack = require('webpack');
 
 module.exports = {
+  mode: 'production',
   entry: path.join(__dirname, 'src/index.js'),
   output: {
     path: path.join(__dirname, 'dist'),
@@ -14,15 +16,14 @@ module.exports = {
   },
   devtool: 'source-map',
   module: {
-    rules: [{
-      test: /\.jsx?$/,
-      loader: 'babel-loader',
-    }],
+    rules: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+      },
+    ],
   },
   externals: {
     react: 'React',
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({ minimize: true, sourceMap: true }),
-  ],
 };

@@ -1,13 +1,9 @@
-module.exports = w => ({
-  files: [
-    'src/**/*.js',
-    'src/**/*.jsx',
-    'test/setup.js',
-  ],
+/** @format */
 
-  tests: [
-    'test/*.spec.jsx',
-  ],
+module.exports = (w) => ({
+  files: ['src/**/*.js', 'src/**/*.jsx', 'test/setup.js'],
+
+  tests: ['test/*.spec.jsx'],
 
   compilers: {
     '**/*.js': w.compilers.babel(),
@@ -21,7 +17,7 @@ module.exports = w => ({
   },
 
   setup: () => {
-    require('babel-polyfill'); // eslint-disable-line
+    require('@babel/polyfill'); // eslint-disable-line
     require('jsdom-global/register'); // eslint-disable-line
     require('./test/setup'); // eslint-disable-line
   },

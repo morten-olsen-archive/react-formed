@@ -4,6 +4,10 @@ This is a project which aims to create a really easy way to build complex forms,
 
 [![Coverage Status](https://coveralls.io/repos/github/morten-olsen/react-formed/badge.svg?branch=master)](https://coveralls.io/github/morten-olsen/react-formed?branch=master) [![Build Status](https://travis-ci.org/morten-olsen/react-formed.svg?branch=master)](https://travis-ci.org/morten-olsen/react-formed) [![Maintainability](https://api.codeclimate.com/v1/badges/5ea237e554397d6a8d35/maintainability)](https://codeclimate.com/github/morten-olsen/react-formed/maintainability) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![code style: airbnb](https://img.shields.io/badge/code%20style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript) [![npm](https://img.shields.io/npm/v/react-formed.svg)](https://www.npmjs.com/package/react-formed) [![Known Vulnerabilities](https://snyk.io/test/github/morten-olsen/react-formed/badge.svg)](https://snyk.io/test/github/morten-olsen/react-formed) [![Wallaby.js](https://img.shields.io/badge/wallaby.js-configured-green.svg)](https://wallabyjs.com)
 
+## IMPORTANT
+
+Currently this package can only be used with `react-redux` versions below 6. If using versions of 6 or above, `react-formed` will run state base instead of redux based
+
 ## Install
 
 ```bash

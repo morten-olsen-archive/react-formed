@@ -16,7 +16,6 @@ script:
 - npm run bundle
 after_success:
 - npm run coverage
-- npm run semantic-release
 before_deploy:
 - git checkout package.json
 branches:

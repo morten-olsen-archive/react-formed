@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: path.join(__dirname, 'src/index.js'),
+  entry: path.join(__dirname, 'src/index.ts'),
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'react-forms.min.js',
@@ -12,13 +12,13 @@ module.exports = {
     libraryTarget: 'umd',
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   devtool: 'source-map',
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(j|t)sx?$/,
         loader: 'babel-loader',
       },
     ],

@@ -1,5 +1,3 @@
-/** @format */
-
 export Form from './form';
 export ReduxForm from './redux-form';
 export withForm from './with-form';

@@ -1,6 +1,6 @@
 /** @format */
 
-export const clear = name => ({
+export const clear = (name: string) => ({
   type: '@@FORMS/SET_VALUES',
   payload: {
     form: name,
@@ -8,7 +8,7 @@ export const clear = name => ({
   },
 });
 
-export const setForm = (name, values) => ({
+export const setForm = (name: string, values: any) => ({
   type: '@@FORMS/SET_VALUES',
   payload: {
     form: name,
@@ -16,7 +16,7 @@ export const setForm = (name, values) => ({
   },
 });
 
-export const setValue = (form, name, value) => ({
+export const setValue = (form: string, name: string, value: string) => ({
   type: '@@FORMS/SET_VALUE',
   payload: {
     form,

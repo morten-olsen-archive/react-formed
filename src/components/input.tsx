@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import withForm from '../with-form';
 
-const Input = ({ setValue, value, ...props }) => (
+interface Props {
+  setValue: (value: any) => void;
+  getValue: () => void;
+  value: any;
+}
+
+const Input = ({ setValue, getValue, value, ...props }: Props) => (
   <input
     {...props}
     value={value || ''}

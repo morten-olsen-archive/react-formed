@@ -36,8 +36,6 @@ describe('with redux', () => {
     const wrapper = wrapElement(<Input name="test" />, store);
     expect(wrapper.html()).to.be.equal('<input value="">');
     expect(store.getState()).to.be.eql({
-      foo: {
-      },
     });
   });
 
@@ -108,5 +106,29 @@ describe('with redux', () => {
     store.dispatch(actions.setForm('foo'));
     const form = selector.getForm(store.getState(), 'foo');
     expect(form).to.be.eql({});
+  });
+
+  it('should reuse old form values', () => {
+    const wrapper = wrapElement(<Input name="test" />, store);
+    const evt = { target: { name: 'pollName', value: 'world' } };
+    wrapper.find(Input).simulate('change', evt);
+    const form = selector.getForm(store.getState(), 'foo');
+    expect(form).to.be.eql({
+      test: 'world',
+    });
+    const wrapper2 = wrapElement(<Input name="test" />, store);
+    expect(wrapper2.html()).to.be.equal('<input value="world">');
+  });
+
+  it('should reset old form values with init state', () => {
+    const wrapper = wrapElement(<Input name="test" />, store, {});
+    const evt = { target: { name: 'pollName', value: 'world' } };
+    wrapper.find(Input).simulate('change', evt);
+    const form = selector.getForm(store.getState(), 'foo');
+    expect(form).to.be.eql({
+      test: 'world',
+    });
+    const wrapper2 = wrapElement(<Input name="test" />, store, {});
+    expect(wrapper2.html()).to.be.equal('<input value="">');
   });
 });

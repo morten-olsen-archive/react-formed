@@ -41,11 +41,11 @@ Group.defaultProps = {
 };
 
 Group.childContextTypes = {
-  form: PropTypes.object,
+  form: PropTypes.object, // eslint-disable-line
 };
 
 Group.contextTypes = {
-  form: PropTypes.object,
+  form: PropTypes.object, // eslint-disable-line
 };
 
 export default withForm(Group);

@@ -60,9 +60,10 @@ class Form extends React.Component {
   }
 
   setStateValue(name, value) {
+    const stateClone = { ...this.state.values };
     this.setState(
       {
-        values: updateState(name, value, this.state.values),
+        values: updateState(name, value, stateClone),
       },
       () => {
         if (this.props.onFormChange) {
@@ -102,12 +103,12 @@ Form.defaultProps = {
 };
 
 Form.childContextTypes = {
-  form: PropTypes.object,
+  form: PropTypes.object, // eslint-disable-line
 };
 
 Form.contextTypes = {
-  store: PropTypes.object,
-  reduxForm: PropTypes.object,
+  store: PropTypes.object, // eslint-disable-line
+  reduxForm: PropTypes.object, // eslint-disable-line
 };
 
 export default Form;

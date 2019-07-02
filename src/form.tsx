@@ -35,7 +35,8 @@ class Form extends React.Component<any, State> {
   }
 
   componentWillMount() {
-    if (this.state.type === StoreType.redux && this.props.initValues) {
+    const hasValues = Object.keys(this.getForm()).length > 0;
+    if (this.state.type === StoreType.redux && (!hasValues || this.props.resetOnMount)) {
       this.props.dispatch(actions.setForm(this.props.name, this.props.initValues));
     }
   }

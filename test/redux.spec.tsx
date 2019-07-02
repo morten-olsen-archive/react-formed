@@ -13,10 +13,10 @@ import {
   actions,
 } from '../src';
 
-const wrapElement = (elm, store, initValues) => mount((
+const wrapElement = (elm, store, initValues, resetOnMount = false) => mount((
   <Provider store={store}>
     <ReduxForm getState={state => state}>
-      <Form name="foo" initValues={initValues}>
+      <Form name="foo" initValues={initValues} resetOnMount={resetOnMount}>
         {elm}
       </Form>
     </ReduxForm>
@@ -36,6 +36,8 @@ describe('with redux', () => {
     const wrapper = wrapElement(<Input name="test" />, store);
     expect(wrapper.html()).to.be.equal('<input value="">');
     expect(store.getState()).to.be.eql({
+      foo: {
+      },
     });
   });
 
@@ -120,7 +122,7 @@ describe('with redux', () => {
     expect(wrapper2.html()).to.be.equal('<input value="world">');
   });
 
-  it('should reset old form values with init state', () => {
+  it('should reuse form state', () => {
     const wrapper = wrapElement(<Input name="test" />, store, {});
     const evt = { target: { name: 'pollName', value: 'world' } };
     wrapper.find(Input).simulate('change', evt);
@@ -129,6 +131,28 @@ describe('with redux', () => {
       test: 'world',
     });
     const wrapper2 = wrapElement(<Input name="test" />, store, {});
+    expect(wrapper2.html()).to.be.equal('<input value="world">');
+  });
+
+  it('should reset old form values with init state on resetOnMount', () => {
+    const wrapper = wrapElement(<Input name="test" />, store, undefined, true);
+    const evt = { target: { name: 'pollName', value: 'world' } };
+    wrapper.find(Input).simulate('change', evt);
+    const form = selector.getForm(store.getState(), 'foo');
+    expect(form).to.be.eql({
+      test: 'world',
+    });
+    const wrapper2 = wrapElement(<Input name="test" />, store, undefined, true);
     expect(wrapper2.html()).to.be.equal('<input value="">');
+  });
+
+  it('should reset old form values with init state on resetOnMount', () => {
+    const wrapper = wrapElement(<Input name="test" />, store, { test: 'world' }, true);
+    const form = selector.getForm(store.getState(), 'foo');
+    expect(form).to.be.eql({
+      test: 'world',
+    });
+    const wrapper2 = wrapElement(<Input name="test" />, store, { test: 'world' }, true);
+    expect(wrapper2.html()).to.be.equal('<input value="world">');
   });
 });

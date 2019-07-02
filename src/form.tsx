@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import { Provider } from './contexts/form';
 import { Consumer } from './contexts/redux';
 import * as actions from './actions';
@@ -14,6 +14,10 @@ interface State {
   type: StoreType,
   values: any
 }
+
+interface OuterProps {
+  name: string;
+};
 
 class Form extends React.Component<any, State> {
   constructor(props: any) {
@@ -83,7 +87,7 @@ class Form extends React.Component<any, State> {
   }
 }
 
-const Outer = ({ name, ...props }) => (
+const Outer = ({ name, ...props }: OuterProps) => (
   <Consumer>
     {({ forms, redux, dispatch } = {}) => (
       <Form {...props} redux={redux} forms={forms} name={name} dispatch={dispatch} />

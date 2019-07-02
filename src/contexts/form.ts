@@ -3,7 +3,7 @@ import { createContext } from 'react';
 const {
   Provider,
   Consumer,
-} = createContext<any>(undefined);
+} = createContext<{} | undefined>(undefined);
 
 export {
   Provider,

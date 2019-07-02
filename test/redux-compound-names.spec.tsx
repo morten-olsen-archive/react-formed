@@ -14,7 +14,7 @@ import {
 } from '../src';
 
 describe('compound names', () => {
-  const wrapElement = (elm, store, initValues) => mount((
+  const wrapElement = (elm: any, store: any, initValues = {}) => mount((
     <Provider store={store}>
       <ReduxForm getState={state => state}>
         <Form name="foo" initValues={initValues}>

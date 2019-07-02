@@ -5,7 +5,6 @@ import { Provider } from '../contexts/form';
 interface Props {
   ownSetValue: (values: any) => void;
   ownValue: {[name: string]: any}
-  value: any;
 }
 
 class List extends Component<Props> {
@@ -16,9 +15,7 @@ class List extends Component<Props> {
   }
 
   setValue(name: string, value: any) {
-    const values = this.props.value;
     this.props.ownSetValue({
-      ...values,
       [name]: value,
     });
   }

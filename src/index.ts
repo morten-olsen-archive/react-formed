@@ -1,11 +1,25 @@
-export Form from './form';
-export ReduxForm from './redux-form';
-export withForm from './with-form';
-export formReducer from './reducer';
-export createSelector from './create-selector';
-export * as actions from './actions';
+import Form from './form';
+import ReduxForm from './redux-form';
+import withForm from './with-form';
+import formReducer from './reducer';
+import createSelector from './create-selector';
+import * as actions from './actions';
 
-export Group from './components/group';
-export List from './components/list';
-export Input from './components/input';
-export WithForm from './components/with-form';
+import Group from './components/group';
+import List from './components/list';
+import Input from './components/input';
+import WithForm from './components/with-form';
+
+export {
+  Form,
+  ReduxForm,
+  withForm,
+  formReducer,
+  createSelector,
+  actions,
+
+  Group,
+  List,
+  Input,
+  WithForm,
+};

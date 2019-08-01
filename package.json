@@ -11,10 +11,11 @@
     "build": "babel -d lib src",
     "bundle": "webpack",
     "npm audit": "lint-staged",
-    "prepublish": "npm run build && npm run bundle",
+    "prepublish": "npm run snyk-protect && npm run build && npm run bundle",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "release": "git add --all && git cz && git push"
+    "release": "git add --all && git cz && git push",
+    "snyk-protect": "snyk protect"
   },
   "nyc": {
     "reporter": [
@@ -104,6 +105,8 @@
     "url": "https://git.mortenolsen.pro/tools/react/react-formed"
   },
   "dependencies": {
-    "lint-staged": "^8.2.1"
-  }
+    "lint-staged": "^8.2.1",
+    "snyk": "^1.208.0"
+  },
+  "snyk": true
 }

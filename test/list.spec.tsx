@@ -9,9 +9,9 @@ import {
 
 
 describe('with list', () => {
-  let state;
-  const wrapElement = (elm, initValues) => mount((
-    <Form onFormChange={(output) => { state = output; }} initValues={initValues}>
+  let state: any;
+  const wrapElement = (elm: any, initValues = {}) => mount((
+    <Form onFormChange={(output: any) => { state = output; }} initValues={initValues}>
       {elm}
     </Form>
   ));

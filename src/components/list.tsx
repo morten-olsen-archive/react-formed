@@ -3,36 +3,57 @@ import PropTypes from 'prop-types';
 import withForm from '../with-form';
 import ListItem from './list-item';
 
-const getValue = (value) => (typeof value === 'object' ? value : { _self: value });
+interface Props {
+  value: any;
+  setValue: (value: any) => void;
+  render: (props: any) => any;
+  children: (props: any) => any;
+}
 
-class List extends Component {
-  constructor() {
-    super();
+const getValue = (value: any) => (typeof value === 'object' ? value : { _self: value });
+
+class List extends Component<Props> {
+  constructor(props: any) {
+    super(props);
     this.setValue = this.setValue.bind(this);
     this.add = this.add.bind(this);
   }
 
-  setValue(index, value) {
+  static propTypes = {
+    children: PropTypes.func.isRequired,
+    render: PropTypes.func.isRequired,
+    setValue: PropTypes.func.isRequired,
+    value: PropTypes.arrayOf(PropTypes.any),
+  };
+
+  static defaultProps = {
+    value: [],
+  };
+
+  setValue(index: number, value: any) {
     const values = [...this.props.value];
     values[index] = value._self ? value._self : value; // eslint-disable-line no-underscore-dangle
     this.props.setValue(values);
   }
 
-  add(value) {
+  add(value: any) {
     const values = [...(this.props.value || [])];
     values.push(value);
     this.props.setValue(values);
   }
 
-  remove(index) {
-    const values = this.props.value.filter((a, i) => i !== index);
+  remove(index: number) {
+    const values = this.props.value.filter((a: any, i: number) => i !== index);
     this.props.setValue(values);
   }
 
-  renderChildren = (value, i) => {
+  renderChildren = (value: any, i: number) => {
     const ownValue = getValue(value);
     return (
-      <ListItem key={`key${+i}`} ownSetValue={newValue => this.setValue(i, newValue)} ownValue={ownValue}>
+      <ListItem key={`key${+i}`}
+        ownSetValue={newValue => this.setValue(i, newValue)}
+        ownValue={ownValue}
+      >
         {this.props.render({
           value: ownValue,
           remove: this.remove.bind(this, i),
@@ -51,20 +72,5 @@ class List extends Component {
     return output;
   }
 }
-
-List.contextTypes = {
-  form: PropTypes.object,
-};
-
-List.propTypes = {
-  children: PropTypes.func.isRequired,
-  render: PropTypes.func.isRequired,
-  setValue: PropTypes.func.isRequired,
-  value: PropTypes.arrayOf(PropTypes.any),
-};
-
-List.defaultProps = {
-  value: [],
-};
 
 export default withForm(List);

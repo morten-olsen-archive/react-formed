@@ -1,16 +1,27 @@
 /** @format */
 
 module.exports = (w) => ({
-  files: ['src/**/*.js', 'src/**/*.jsx', 'test/setup.js'],
+  files: [
+    'src/**/*.js',
+    'src/**/*.jsx',
+    'src/**/*.ts',
+    'src/**/*.tsx',
+    'test/setup.js',
+  ],
 
-  tests: ['test/*.spec.jsx'],
+  tests: [
+    'test/*.spec.jsx',
+    'test/*.spec.tsx',
+  ],
 
   compilers: {
     '**/*.js': w.compilers.babel(),
     '**/*.jsx': w.compilers.babel(),
+    '**/*.ts': w.compilers.babel(),
+    '**/*.tsx': w.compilers.babel(),
   },
 
-  testFramework: 'mocha',
+  testFramework: 'jest',
 
   env: {
     type: 'node',

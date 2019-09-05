@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
@@ -13,7 +13,7 @@ import {
   actions,
 } from '../src';
 
-const wrapElement = (elm, store, initValues, resetOnMount = false) => mount((
+const wrapElement = (elm: ReactNode, store: ReturnType<typeof createStore>, initValues?: any, resetOnMount = false) => mount((
   <Provider store={store}>
     <ReduxForm getState={state => state}>
       <Form name="foo" initValues={initValues} resetOnMount={resetOnMount}>
@@ -24,8 +24,8 @@ const wrapElement = (elm, store, initValues, resetOnMount = false) => mount((
 ));
 
 describe('with redux', () => {
-  let store;
-  let selector;
+  let store: ReturnType<typeof createStore>;
+  let selector: ReturnType<typeof createSelector>;
 
   beforeEach(() => {
     store = createStore(formReducer);
@@ -37,6 +37,8 @@ describe('with redux', () => {
     expect(wrapper.html()).to.be.equal('<input value="">');
     expect(store.getState()).to.be.eql({
       foo: {
+        values: {},
+        dirty: false,
       },
     });
   });
@@ -46,7 +48,10 @@ describe('with redux', () => {
     expect(wrapper.html()).to.be.equal('<input value="hello">');
     expect(store.getState()).to.be.eql({
       foo: {
-        test: 'hello',
+        values: {
+          test: 'hello',
+        },
+        dirty: false,
       },
     });
   });
@@ -57,7 +62,10 @@ describe('with redux', () => {
     wrapper.find(Input).simulate('change', evt);
     expect(store.getState()).to.be.eql({
       foo: {
-        test: 'world',
+        values: {
+          test: 'world',
+        },
+        dirty: true,
       },
     });
     expect(wrapper.html()).to.be.equal('<input value="world">');
@@ -70,6 +78,8 @@ describe('with redux', () => {
     store.dispatch(actions.clear('foo'));
     expect(store.getState()).to.be.eql({
       foo: {
+        values: {},
+        dirty: false,
       },
     });
     expect(wrapper.html()).to.be.equal('<input value="">');
@@ -105,7 +115,7 @@ describe('with redux', () => {
   });
 
   it('should be able to set form to empty', () => {
-    store.dispatch(actions.setForm('foo'));
+    store.dispatch(actions.setForm('foo', undefined));
     const form = selector.getForm(store.getState(), 'foo');
     expect(form).to.be.eql({});
   });
@@ -147,7 +157,7 @@ describe('with redux', () => {
   });
 
   it('should reset old form values with init state on resetOnMount', () => {
-    const wrapper = wrapElement(<Input name="test" />, store, { test: 'world' }, true);
+    wrapElement(<Input name="test" />, store, { test: 'world' }, true);
     const form = selector.getForm(store.getState(), 'foo');
     expect(form).to.be.eql({
       test: 'world',

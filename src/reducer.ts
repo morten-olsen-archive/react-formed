@@ -1,21 +1,26 @@
-/** @format */
-
 import { updateState } from './helpers';
+import { Reducer } from 'redux';
 
-const reducer = (state = {}, action) => {
+const reducer: Reducer = (state = {}, action) => {
   switch (action.type) {
     case '@@FORMS/SET_VALUES': {
-      const { form, values } = action.payload;
+      const { form, values, dirty } = action.payload;
       return {
         ...state,
-        [form]: values,
+        [form]: {
+          values,
+          dirty,
+        }
       };
     }
     case '@@FORMS/SET_VALUE': {
       const { form, name, value } = action.payload;
       return {
         ...state,
-        [form]: updateState(name, value, state[form]),
+        [form]: {
+          values: updateState(name, value, state[form]),
+          dirty: true,
+        },
       };
     }
     default:

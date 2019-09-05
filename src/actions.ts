@@ -5,14 +5,16 @@ export const clear = (name: string) => ({
   payload: {
     form: name,
     values: {},
+    dirty: false,
   },
 });
 
-export const setForm = (name: string, values: any) => ({
+export const setForm = (name: string, values: any, dirty: boolean = true) => ({
   type: '@@FORMS/SET_VALUES',
   payload: {
     form: name,
     values: values || {},
+    dirty,
   },
 });
 

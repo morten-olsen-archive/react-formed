@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode, FunctionComponent } from 'react';
 import PropTypes, { string } from 'prop-types';
 import { Provider } from './contexts/form';
 import { Consumer } from './contexts/redux';
@@ -12,14 +12,34 @@ enum StoreType {
 
 interface State {
   type: StoreType,
-  values: any
+  values: any,
+  dirty: boolean,
+  initValues: any;
 }
 
 interface OuterProps {
   name: string;
+  children?: ReactNode;
+  initValues: any;
 };
 
-class Form extends React.Component<any, State> {
+const getReduxValues = (forms: any, name: string) => {
+  const form = forms[name];
+  if (!form) {
+    return {};
+  }
+  return form.values || {};
+}
+
+const getReduxDirty = (forms: any, name: string) => {
+  const form = forms[name];
+  if (!form) {
+    return false;
+  }
+  return form.dirty;
+}
+
+class Form extends React.Component<OuterProps & any, State> {
   constructor(props: any) {
     super(props);
     const type = props.redux ? StoreType.redux : StoreType.state;
@@ -28,22 +48,34 @@ class Form extends React.Component<any, State> {
     this.state = {
       type,
       values: this.props.initValues || {},
+      initValues: this.props.initValues,
+      dirty: false,
     };
+  }
+
+  componentWillMount() {
+    this.update();
+  }
+
+  get isDirty() {
+    const dirty = this.state.type === StoreType.redux
+      ? getReduxDirty(this.props.forms, this.props.name)
+      : this.state.dirty;
+    return dirty;
+  }
+
+  update() {
+    if (this.state.type === StoreType.redux && (!this.isDirty || this.props.resetOnMount)) {
+      this.props.dispatch(actions.setForm(this.props.name, this.props.initValues, false));
+    }
     if (this.props.onFormChange) {
       this.props.onFormChange(this.getForm());
     }
   }
 
-  componentWillMount() {
-    const hasValues = Object.keys(this.getForm()).length > 0;
-    if (this.state.type === StoreType.redux && (!hasValues || this.props.resetOnMount)) {
-      this.props.dispatch(actions.setForm(this.props.name, this.props.initValues));
-    }
-  }
-
   getForm() {
     const form = this.state.type === StoreType.redux
-      ? this.props.forms[this.props.name]
+      ? getReduxValues(this.props.forms, this.props.name)
       : this.state.values;
     return form || {};
   }
@@ -57,7 +89,6 @@ class Form extends React.Component<any, State> {
 
   setValue(name: string, value: string) {
     if (this.state.type === StoreType.state) {
-      const values = 
       this.setState({
         values: updateState(name, value, this.state.values),
       }, () => {
@@ -75,6 +106,13 @@ class Form extends React.Component<any, State> {
   }
 
   render() {
+    if (this.state.initValues !== this.props.initValues) {
+      this.setState({
+        initValues: this.props.initValues
+      }, () => {
+        this.update();
+      });
+    }
     const api = {
       getValue: this.getValue,
       setValue: this.setValue,
@@ -88,7 +126,7 @@ class Form extends React.Component<any, State> {
   }
 }
 
-const Outer = ({ name, ...props }: OuterProps) => (
+const Outer: FunctionComponent<OuterProps> = ({ name, ...props }) => (
   <Consumer>
     {({ forms, redux, dispatch } = {}) => (
       <Form {...props} redux={redux} forms={forms} name={name} dispatch={dispatch} />

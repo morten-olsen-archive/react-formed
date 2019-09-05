@@ -18,7 +18,6 @@ const wrapElement = (elm: ReactNode, store: ReturnType<typeof createStore>, init
 
   const Comp = () => {
     const [value, setValue] = useState(initValues);
-    console.log('val', value);
     return (
       <Provider store={store}>
         <ReduxForm getState={state => state}>

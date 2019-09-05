@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Consumer } from './contexts/form';
 
 const withForm = (WrappedComponent) => {

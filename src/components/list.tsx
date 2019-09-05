@@ -19,14 +19,14 @@ class List extends Component<Props> {
     this.add = this.add.bind(this);
   }
 
-  propTypes = {
+  static propTypes = {
     children: PropTypes.func.isRequired,
     render: PropTypes.func.isRequired,
     setValue: PropTypes.func.isRequired,
     value: PropTypes.arrayOf(PropTypes.any),
   };
 
-  defaultProps = {
+  static defaultProps = {
     value: [],
   };
 

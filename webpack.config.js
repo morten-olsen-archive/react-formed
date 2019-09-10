@@ -1,29 +1,20 @@
-/** @format */
-
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = {
-  mode: 'production',
-  entry: path.join(__dirname, 'src/index.ts'),
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'react-forms.min.js',
-    library: 'ReactFormed',
-    libraryTarget: 'umd',
-  },
+const config = {
+  entry: path.join(__dirname, 'packages', 'react-formed-playground', 'index.tsx'),
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensions: ['.tsx', '.ts', '.js'],
   },
-  devtool: 'source-map',
+  plugins: [
+    new HtmlWebpackPlugin(),
+  ],
   module: {
-    rules: [
-      {
-        test: /\.(j|t)sx?$/,
-        loader: 'babel-loader',
-      },
-    ],
-  },
-  externals: {
-    react: 'React',
+    rules: [{
+      test: /\.tsx?$/,
+      loader: 'babel-loader',
+    }],
   },
 };
+
+module.exports = config;

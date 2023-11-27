@@ -104,6 +104,6 @@
     "url": "https://git.mortenolsen.pro/tools/react/react-formed"
   },
   "dependencies": {
-    "lint-staged": "^8.2.1"
+    "lint-staged": "^10.2.0"
   }
 }
